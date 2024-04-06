@@ -1,0 +1,42 @@
+#pd {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+#sacowea {
+    background-color: #1f1f1f;
+    color: white;
+    margin: 0px;
+    /* Margen de 1px alrededor del elemento */
+}
+#perra {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#aweonao {
+    background-color: #8892ad75;
+    justify-content: center;
+    align-items: center;
+    margin-top: 250px;
+    margin-bottom: 16px;
+    border-radius: 20px;
+    padding: 40px;
+}
+body {
+    background: #202020;
+    color:white;
+}
+#emailHelp {
+    color: white;
+}
+#maraca {
+    font-weight: bold;
+    font-size: 22px;
+  }
+  #wena, #emailHelp {
+    font-size: 16px;
+  }
+  
