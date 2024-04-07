@@ -7,8 +7,8 @@
 }
 
 #sacowea {
-    background-color: #1f1f1f;
-    color: white;
+    background-color: #fff;
+    color: #202020;
     margin: 0px;
     /* Margen de 1px alrededor del elemento */
 }
@@ -26,8 +26,8 @@
     padding: 40px;
 }
 body {
-    background: #202020;
-    color:white;
+    background: #fff;
+    color: #202020;
 }
 #emailHelp {
     color: white;
