@@ -30,13 +30,14 @@ body {
     color: #202020;
 }
 #emailHelp {
-    color: white;
+    color: #202020;
 }
 #maraca {
     font-weight: bold;
     font-size: 22px;
   }
   #wena, #emailHelp {
+    color:#202020
     font-size: 16px;
   }
   
