@@ -12,12 +12,12 @@ import { isAuthenticated } from "../helpers/auth.js";
 const router = Router();
 
 // New Note
-router.get("/notes/add", isAuthenticated, renderNoteForm);
+router.get("/notes/add",  renderNoteForm);
 
 router.post("/notes/new-note", isAuthenticated, createNewNote);
 
 // Get All Notes
-router.get("/notes", isAuthenticated, renderNotes);
+router.get("/notes", renderNotes);
 
 // Edit Notes
 router.get("/notes/edit/:id", isAuthenticated, renderEditForm);

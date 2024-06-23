@@ -7,7 +7,7 @@ import morgan from "morgan";
 import MongoStore from "connect-mongo";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-
+import { create } from "express-handlebars"; // Importación correcta
 
 import { MONGODB_URI, PORT } from "./config.js";
 
@@ -23,6 +23,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // settings
 app.set("port", PORT);
 app.set("views", join(__dirname, "views"));
+
+const hbs = create({ extname: ".hbs" }); // Crear instancia del motor de plantillas
+app.engine(".hbs", hbs.engine); // Configurar motor de plantillas
+app.set("view engine", ".hbs");
 
 // middlewares
 app.use(morgan("dev"));
@@ -57,9 +61,16 @@ app.use(notesRoutes);
 // static files
 app.use(express.static(join(__dirname, "public")));
 
-// Serve HTML files
-app.get("/", (req, res) => {
-  res.sendFile(join(__dirname, "views", "homepage.html"));
+app.use((req, res, next) => {
+  return res.status(404).render("404");
 });
+
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.render("error", {
+    error,
+  });
+});
+
 
 export default app;

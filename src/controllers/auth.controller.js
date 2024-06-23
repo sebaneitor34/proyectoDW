@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import passport from "passport";
 
-export const renderSignUpForm = (req, res) => res.render("signup.html");
+export const renderSignUpForm = (req, res) => res.render("/signup");
 
 export const signup = async (req, res) => {
   let errors = [];
@@ -15,7 +15,7 @@ export const signup = async (req, res) => {
   }
 
   if (errors.length > 0) {
-    return res.render("signup.html", {
+    return res.render("/signup", {
       errors,
       name,
       email,
@@ -28,7 +28,7 @@ export const signup = async (req, res) => {
   const userFound = await User.findOne({ email: email });
   if (userFound) {
     req.flash("error_msg", "The Email is already in use.");
-    return res.redirect("signup.html");
+    return res.redirect("/signup");
   }
 
   // Saving a New User
@@ -36,14 +36,14 @@ export const signup = async (req, res) => {
   newUser.password = await newUser.encryptPassword(password);
   await newUser.save();
   req.flash("success_msg", "You are registered.");
-  res.redirect("login.html");
+  res.redirect("login");
 };
 
-export const renderSigninForm = (req, res) => res.render("login.html");
+export const renderSigninForm = (req, res) => res.render("login");
 
 export const signin = passport.authenticate("local", {
-  successRedirect: "/notes",
-  failureRedirect: "login.html",
+  successRedirect: "homepage",
+  failureRedirect: "/login",
   failureFlash: true,
 });
 
@@ -51,6 +51,6 @@ export const logout = async (req, res, next) => {
   await req.logout((err) => {
     if (err) return next(err);
     req.flash("success_msg", "You are logged out now.");
-    res.redirect("login.html");
+    res.redirect("/login");
   });
 };

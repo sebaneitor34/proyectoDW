@@ -3,5 +3,5 @@ export const isAuthenticated = (req, res, next) => {
       return next();
     }
     req.flash("error_msg", "Not Authorized.");
-    res.redirect("/users/signin");
+    res.redirect("/login");
   };

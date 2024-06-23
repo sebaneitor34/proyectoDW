@@ -1,17 +1,11 @@
-import mongoose from "mongoose";
-import { MONGODB_URI } from "./config.js";
+import mongoose from 'mongoose';
 
-try {
-  const db = await mongoose.connect(MONGODB_URI);
-  console.log("Connected to ", db.connection.name);
-} catch (error) {
-  console.error(error);
-}
+const { EVENTS_APP_MONGODB_HOST, EVENTS_APP_MONGODB_DATABASE } = process.env;
+const MONGODB_URI = `mongodb://${EVENTS_APP_MONGODB_HOST}/${EVENTS_APP_MONGODB_DATABASE}`;
 
-mongoose.connection.on("connected", () => {
-  console.log("Mongoose is connected");
-});
-
-mongoose.connection.on("disconnected", () => {
-  console.log("Mongoose is disconnected");
-});
+mongoose.connect(MONGODB_URI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+})
+    .then(db => console.log('Database is connected'))
+    .catch(err => console.log(err));
