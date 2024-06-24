@@ -11,6 +11,7 @@ import { create } from "express-handlebars"; // Importación correcta
 
 import { MONGODB_URI, PORT } from "./config.js";
 
+import cartRoutes from "./routes/cart.routes.js"
 import indexRoutes from "./routes/index.routes.js";
 import userRoutes from "./routes/auth.routes.js";
 import notesRoutes from "./routes/notes.routes.js";
@@ -57,6 +58,7 @@ app.use((req, res, next) => {
 app.use(indexRoutes);
 app.use(userRoutes);
 app.use(notesRoutes);
+app.use(cartRoutes);
 
 // static files
 app.use(express.static(join(__dirname, "public")));
@@ -71,6 +73,7 @@ app.use((error, req, res, next) => {
     error,
   });
 });
+
 
 
 export default app;

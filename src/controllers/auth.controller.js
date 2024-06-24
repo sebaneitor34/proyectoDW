@@ -1,7 +1,12 @@
 import User from "../models/User.js";
 import passport from "passport";
 
-export const renderSignUpForm = (req, res) => res.render("/signup");
+export const renderSignUpForm = (req, res) => res.render("signup");
+
+export const renderCuenta = (req, res) => {
+  const user = req.user;
+  res.render("Cuenta",{wallet: user.wallet});
+};
 
 export const signup = async (req, res) => {
   let errors = [];
@@ -41,11 +46,32 @@ export const signup = async (req, res) => {
 
 export const renderSigninForm = (req, res) => res.render("login");
 
-export const signin = passport.authenticate("local", {
-  successRedirect: "homepage",
-  failureRedirect: "/login",
-  failureFlash: true,
-});
+export const signin = (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      // Manejo de errores generales de autenticación
+      console.error('Error de autenticación:', err); // Registra el error para depuración
+      req.flash('error_msg', 'Ocurrió un error inesperado durante la autenticación.');
+      return res.redirect('/login');
+    }
+    if (!user) {
+      // Manejo de credenciales inválidas u otros errores de autenticación
+      req.flash('error_msg', info.message || 'Credenciales inválidas.'); // Muestra el mensaje de error si existe
+      return res.redirect('/login');
+    }
+
+    // Autenticación exitosa
+    req.logIn(user, (err) => {
+      if (err) { 
+        console.error('Error al iniciar sesión:', err);
+        req.flash('error_msg', 'Ocurrió un error al iniciar sesión.');
+        return res.redirect('/login'); 
+      }
+      return res.redirect('/'); 
+    });
+  })(req, res, next);
+};
+
 
 export const logout = async (req, res, next) => {
   await req.logout((err) => {
@@ -53,4 +79,25 @@ export const logout = async (req, res, next) => {
     req.flash("success_msg", "You are logged out now.");
     res.redirect("/login");
   });
+};
+
+export const renderWallet = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id); // Obtén el usuario autenticado
+    const walletBalance = user.wallet; // Obtén el saldo de la wallet del usuario
+
+    res.render('wallet', { walletBalance }); // Pasa el saldo a la vista
+  } catch (error) {
+    // ... manejo de errores ...
+  }
+};
+
+
+export const addWallet = async (req, res) => {
+  const { wallet } = req.body;
+  const walletNumeber=wallet;
+  const user = req.user;
+user.wallet=walletNumeber+user.wallet;
+user.save();
+res.redirect("/Cuenta");
 };

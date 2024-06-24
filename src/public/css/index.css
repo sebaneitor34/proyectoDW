@@ -1,0 +1,88 @@
+#pd {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+#sacowea {
+    background-color: #fff;
+    color: #202020;
+    margin: 0px;
+    /* Margen de 1px alrededor del elemento */
+}
+#perra {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#aweonao {
+    background-color: #8892ad75;
+    justify-content: center;
+    align-items: center;
+    margin-top: 250px;
+    margin-bottom: 16px;
+    border-radius: 20px;
+    padding: 40px;
+}
+body {
+    background: #bdbbbb;
+    color: #202020;
+}
+#emailHelp {
+    color: #202020;
+}
+#maraca {
+    font-weight: bold;
+    font-size: 22px;
+  }
+  #wena, #emailHelp {
+    color:#202020;
+    font-size: 16px;
+  }
+  #form1{
+    padding-right: 100px;  
+    padding-top: 25px;
+    }
+    #main{
+        justify-content: center;
+     height: max-content;
+    }
+    #sech{
+        width: 1000px;
+      }
+      #row1{
+        justify-content: center;
+        margin-top: 60px;
+      }
+      #img1{
+        height: 600px;
+        width: 700px;
+      }
+      #ola1{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+      .card-title-color{
+        color: white;
+        }
+        .card-text-color{
+            color: white;
+            text-decoration: none;
+          }
+          .card-size{
+            width: 300px;
+            height: 400px;
+          }
+          #box-cuenta{
+            height: 300px;
+            padding-bottom: 550px;
+            display: grid;
+          }
+          #wallet{
+            align-items: center   ;
+            color: #fff;
+            display: grid;
+          }

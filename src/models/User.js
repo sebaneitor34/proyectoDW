@@ -6,12 +6,11 @@ const UserSchema = new mongoose.Schema(
     name: { type: String, trim: true },
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
-  },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
-);
+    wallet: { type: Number, default: 0, required: true },
+    role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' }
+  });
+
+
 
 UserSchema.methods.encryptPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);

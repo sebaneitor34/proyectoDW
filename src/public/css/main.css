@@ -9,3 +9,7 @@ body {
   .bg-black {
     background: #bdbbbb;
   }
+  #cuadrodemierda {
+    padding-bottom: 50px;
+  }
+  

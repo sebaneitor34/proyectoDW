@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">CamisetasNBA</a>
+        <a class="navbar-brand" href="/">CamisetasNBA</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -8,7 +8,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+                    <a class="nav-link active" aria-current="page" href="/">Inicio</a>
                 </li>
                 {{#if user}}
           <li class="nav-item dropdown">
@@ -23,11 +23,17 @@
               Productos
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="/notes">Todos los productos</a>
-              <a class="dropdown-item" href="/notes/add">Agregar producto</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/logout">Cerrar sesión</a>
+              <a class="dropdown-item" href="/addProduct">Agregar producto</a>
             </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/Cuenta">Mi cuenta</a>
+          </li>
+           <li class="nav-item">
+            <a class="nav-link" href="/Carrito">Carro</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Cerrar sesión</a>
           </li>
         {{else}}
           <li class="nav-item">
@@ -95,48 +101,33 @@
     </div>
     <div id="perra" class="row">
         <h1 id="pd">Todos los productos</h1>
-        <div class="col-sm-3">
-            <div class="card" style="width: 18rem;">
-                <img src="https://camisetasfutbolmania.com/5297-large_default/camiseta-nba-anthony-davis-los-angeles-lakers-amarilla-2019-2020.jpg"
-                    class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Anthony Davis</h5>
-                    <p class="card-text">Valor: 40.000$</p>
-                    <a href="#" class="btn btn-primary">Comprar</a>
-                </div>
             </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="card" style="width: 18rem;">
-                <img src="https://cdnx.jumpseller.com/solobasquet-chile1/image/35028398/resize/610/610?1683680628"
+            {{#each productos}}
+   <div class="col-sm-4">
+            <div id="ola1">
+                <a  href="./albumPages/{{_id}}" class="card card-size" style="width: 18rem;  background-color:  rgb(15, 15, 15);">
+                  <div class="image-box">
+                    <img id="cards"
+                    
+                    src={{image}}
                     class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Luka Dončić</h5>
-                    <p class="card-text">Valor: 40.000$</p>
-                    <a href="#" class="btn btn-primary">Comprar</a>
-                </div>
+                  </div>
+                  <div  class="card-body">
+                    
+                    <h5 id="cards" class="card-title-color">{{productName}}</h5>
+    
+                    <p class="card-text-color">${{price}}</p>
+                  </div>
+                </a>
             </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="card" style="width: 18rem;">
-                <img src="https://images.footballfanatics.com/miami-heat/miami-heat-jordan-statement-edition-swingman-jersey-red-jimmy-butler-unisex_ss4_p-13365072+u-gippfentzzpnbqqfu1dl+v-bac1e1f715ff493abc2ec2007811c3f2.jpg?_hv=2&w=600"
-                    class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Jimmy Butler</h5>
-                    <p class="card-text">Valor: 30.000$</p>
-                    <a href="#" class="btn btn-primary">Comprar</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="card" style="width: 18rem;">
-                <img src="https://images.footballfanatics.com/los-angeles-lakers/los-angeles-lakers-shaquille-oneil-1996-hardwood-classics-road-swingman-jersey-by-mitchell-and-ness-light-gold-mens_ss4_p-12012871+u-kq218xz5otbv9j84j9t9+v-6e33ffed8830478ab50b1d1387a7e6db.jpg?_hv=2&w=600"
-                    class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Shaquille O´neal</h5>
-                    <p class="card-text">Valor: 20.000$</p>
-                    <a href="#" class="btn btn-primary">Comprar</a>
-                </div>
+          </div>
+{{/each}}
+      </div>
+     
+    
+    
+    </div>
+
             </div>
         </div>
     </div>

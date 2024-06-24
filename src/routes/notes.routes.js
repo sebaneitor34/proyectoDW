@@ -1,30 +1,19 @@
 import { Router } from "express";
-import {
-  renderNoteForm,
-  createNewNote,
-  renderNotes,
-  renderEditForm,
-  updateNote,
-  deleteNote,
-} from "../controllers/notes.controller.js";
-import { isAuthenticated } from "../helpers/auth.js";
+import { renderProductForm, createNewProduct,renderProducts,renderEditForm,editProduct,deleteProduct,renderAlbumPage} from "../controllers/products.controller.js";
+const router =Router();
 
-const router = Router();
+router.get('/addProduct',renderProductForm);
 
-// New Note
-router.get("/notes/add",  renderNoteForm);
+router.post('/addProduct',createNewProduct);
 
-router.post("/notes/new-note", isAuthenticated, createNewNote);
+router.get('/',renderProducts);
 
-// Get All Notes
-router.get("/notes", renderNotes);
+router.get('/edit/:id',renderEditForm);
 
-// Edit Notes
-router.get("/notes/edit/:id", isAuthenticated, renderEditForm);
+router.put('/edit/:id',editProduct);
 
-router.put("/notes/edit-note/:id", isAuthenticated, updateNote);
+router.get('/albumPages/:id',renderAlbumPage);
 
-// Delete Notes
-router.delete("/notes/delete/:id", isAuthenticated, deleteNote);
+router.get('/delete/:id',deleteProduct);
 
 export default router;

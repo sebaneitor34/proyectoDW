@@ -10,7 +10,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/">Inicio</a>
                 </li>
-                {{#if user}}
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -23,26 +22,18 @@
               Productos
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="/addProduct">Agregar producto</a>
+              <a class="dropdown-item" href="addProduct">Agregar producto</a>
             </ul>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/Cuenta">Mi cuenta</a>
           </li>
-           <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" href="/Carrito">Carro</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/logout">Cerrar sesión</a>
           </li>
-        {{else}}
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Iniciar sesión</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/signup">Registrarse</a>
-          </li>
-        {{/if}}
             </ul>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
@@ -51,29 +42,47 @@
         </div>
     </div>
 </nav>
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-sm-6">
-      <form action="/login" method="POST"> 
-        <div id="aweonao">
-          <div class="mb-3">
-            <label id="maraca" for="email" class="form-label">Dirección de correo electrónico</label>
-            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">Nunca compartiremos tu correo con nadie.</div>
+<div id="rows" class="row">
+  <div class="col">
+    <div id="divrayo1"></div>
+  </div>
+  <div id="main" class="col-sm-4">
+    <!-- Información entre efectos de la pagina -->
+    <div  class="container">
+      <div id="cuadrodemierda" class="box">
+
+
+
+        <form id="form1" action="addProduct" method="POST">
+          <div id="addproductform">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Nombre del producto</label>
+              <input type="text" class="form-control" name="productName">
+
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Precio del producto</label>
+              <input type="number" class="form-control" name="price">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Descripcion del producto</label>
+              <input type="text" class="form-control" name="description">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Stock</label>
+              <input type="number" class="form-control" name="stock">
+            </div>
+            <div class="mb-3">
+              <label for="image" class="form-label">URL de imagen del producto</label>
+              <input type="text" class="form-control" name="image">
+
+            </div>
+            <button type="submit" class="btn btn-outline-light">Crear nuevo producto</button>
           </div>
-          <div class="mb-3">
-            <label id="maraca" for="password" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="password" name="password">
-          </div>
-          <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label id="wena" class="form-check-label" for="exampleCheck1">Guardar datos de inicio de sesión</label>
-          </div>
-          <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-        </div>
-      </form>
+        </form>
+
+      </div>
     </div>
   </div>
 </div>
-<p class="text-center">¿No tienes una cuenta? <a href="/signup" class="text-info">Registrarse</a></p>
 
