@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import passport from "passport";
+import jwt from 'jsonwebtoken';
 
 export const renderSignUpForm = (req, res) => res.render("signup");
 
@@ -10,7 +11,7 @@ export const renderCuenta = (req, res) => {
 
 export const signup = async (req, res) => {
   let errors = [];
-  const { name, email, password, confirm_password } = req.body;
+  const { name, email, password, confirm_password, role= 'USER' } = req.body;
   if (password !== confirm_password) {
     errors.push({ text: "Passwords do not match." });
   }
@@ -62,13 +63,16 @@ export const signin = (req, res, next) => {
 
     // Autenticación exitosa
     req.logIn(user, (err) => {
-      if (err) { 
-        console.error('Error al iniciar sesión:', err);
-        req.flash('error_msg', 'Ocurrió un error al iniciar sesión.');
-        return res.redirect('/login'); 
+      if (err) {
+        // ... (manejo de errores) ...
+      } else {
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        console.log(token);
+        res.cookie('token', token, { httpOnly: true }); // Establecer la cookie antes de redirigir
+        return res.redirect('/'); // Redirigir después de establecer la cookie
       }
-      return res.redirect('/'); 
     });
+    
   })(req, res, next);
 };
 

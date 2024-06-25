@@ -1,88 +1,88 @@
 #pd {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 16px;
-    margin-bottom: 16px;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
 }
 
 #sacowea {
-    background-color: #fff;
-    color: #202020;
-    margin: 0px;
+    background-color: #fff !important;
+    color: #202020 !important;
+    margin: 0px !important;
     /* Margen de 1px alrededor del elemento */
 }
 #perra {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
 }
 #aweonao {
-    background-color: #8892ad75;
-    justify-content: center;
-    align-items: center;
-    margin-top: 250px;
-    margin-bottom: 16px;
-    border-radius: 20px;
-    padding: 40px;
+    background-color: #8892ad75 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 250px !important;
+    margin-bottom: 16px !important;
+    border-radius: 20px !important;
+    padding: 40px !important;
 }
 body {
-    background: #bdbbbb;
-    color: #202020;
+    background: #bdbbbb !important;
+    color: #202020 !important;
 }
 #emailHelp {
-    color: #202020;
+    color: #202020 !important;
 }
 #maraca {
-    font-weight: bold;
-    font-size: 22px;
+    font-weight: bold !important;
+    font-size: 22px !important;
   }
   #wena, #emailHelp {
-    color:#202020;
-    font-size: 16px;
+    color:#202020 !important;
+    font-size: 16px !important;
   }
   #form1{
-    padding-right: 100px;  
-    padding-top: 25px;
+    padding-right: 100px !important;  
+    padding-top: 25px !important;
     }
     #main{
-        justify-content: center;
-     height: max-content;
+        justify-content: center !important;
+     height: max-content !important;
     }
     #sech{
-        width: 1000px;
+        width: 1000px !important;
       }
       #row1{
-        justify-content: center;
-        margin-top: 60px;
+        justify-content: center !important;
+        margin-top: 60px !important;
       }
       #img1{
-        height: 600px;
-        width: 700px;
+        height: 600px !important;
+        width: 700px !important;
       }
       #ola1{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        height: 100% !important;
       }
       .card-title-color{
-        color: white;
+        color: white !important;
         }
         .card-text-color{
-            color: white;
-            text-decoration: none;
+            color: white !important;
+            text-decoration: none !important;
           }
           .card-size{
-            width: 300px;
-            height: 400px;
+            width: 300px !important;
+            height: 400px !important;
           }
           #box-cuenta{
-            height: 300px;
-            padding-bottom: 550px;
-            display: grid;
+            height: 300px !important;
+            padding-bottom: 550px !important;
+            display: grid !important;
           }
           #wallet{
-            align-items: center   ;
-            color: #fff;
-            display: grid;
+            align-items: center !important ;
+            color: #fff !important;
+            display: grid !important;
           }

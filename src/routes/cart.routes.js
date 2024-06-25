@@ -14,7 +14,7 @@ router.post("/Carrito", comprar);
 
 router.get("/Carrito", renderCart);
 
-router.post("/albumPages/:id", addCart);
+router.post("/Camisetas/:id", addCart);
 
 router.post("/addCart/:id", addCart);
 

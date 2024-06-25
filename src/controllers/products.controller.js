@@ -1,4 +1,5 @@
 import producto from "../models/productos.model.js";
+
 export const renderProductForm=(req,res)=>{
     res.render('addProduct')
 };
@@ -15,23 +16,55 @@ const productos =await producto.find().lean();
 res.render('homepage',{productos})
 }
 
-export const  renderEditForm=(req,res)=>{
- res.send('render edit form')
+
+export const renderEditForm = async (req, res) => {
+  try {
+    const productos =await producto.find().lean();
+    if (!producto) {
+      return res.status(404).send("Producto no encontrado");
+    }
+    console.log(productos);
+    res.render("editProduct", { productos });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error e0n el servidor");
+  }
+};
+
+export const editProduct = async (req, res) => {
+  try {
+    const { productName, price, description, stock, image } = req.body;
+    const productId = req.params.id;
+  
+    // Validación de datos (opcional, pero recomendada)
+  
+    const productoActualizado = await producto.findByIdAndUpdate(productId, { 
+      productName, 
+      price, 
+      description, 
+      stock, 
+      image 
+    }.lean());
+  res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    req.flash('error_msg', 'Error al actualizar el producto');
+    res.redirect('/editProduct'); // Redirige de vuelta al formulario en caso de error
+  }
 }
 
-export const editProduct=(req,res)=>{
-     res.send('edit product')
-}
 
 
-export const  renderAlbumPage=async (req,res)=>{
+
+
+export const  renderCamisetas=async (req,res)=>{
     const product=await  producto.findById(req.params.id).lean()
-    res.render("albumPages",{product})
+    res.render("Camisetas",{product})
    }
 
    export const  deleteProduct=async (req,res)=>{
     const product=await producto.findByIdAndDelete(req.params.id).lean()
-   res.redirect("/");
+    res.redirect('/');
    }   
    
    export const renderProductDetails = async (req, res) => {
@@ -45,13 +78,13 @@ export const  renderAlbumPage=async (req,res)=>{
         return res.redirect("/"); // Redirigir a la página principal o de error
       }
   
-      const product = await Product.findById(productId).lean(); 
+      const product = await producto.findById(productId).lean(); 
       if (!product) {
         req.flash("error_msg", "Producto no encontrado");
         return res.redirect("/"); 
       }
   
-      res.render("albumPages", { product });
+      res.render("Camisetas", { product });
     } catch (error) {
       // ... manejo de errores ...
     }

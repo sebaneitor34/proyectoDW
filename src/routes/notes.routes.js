@@ -1,18 +1,21 @@
 import { Router } from "express";
-import { renderProductForm, createNewProduct,renderProducts,renderEditForm,editProduct,deleteProduct,renderAlbumPage} from "../controllers/products.controller.js";
+import { renderProductForm, createNewProduct,renderProducts,renderEditForm,editProduct,deleteProduct,renderCamisetas} from "../controllers/products.controller.js";
+import authRequired from '../middlewares/auth.js';
+import adminRequired from "../middlewares/admin.js";
 const router =Router();
 
+// products.routes.js (corregido)
 router.get('/addProduct',renderProductForm);
 
-router.post('/addProduct',createNewProduct);
+router.post ('/addProduct', createNewProduct);
 
 router.get('/',renderProducts);
 
-router.get('/edit/:id',renderEditForm);
+router.get('/editProduct/:id',renderEditForm);
 
-router.put('/edit/:id',editProduct);
+router.post('/edit/:id',editProduct);
 
-router.get('/albumPages/:id',renderAlbumPage);
+router.get('/Camisetas/:id',renderCamisetas);
 
 router.get('/delete/:id',deleteProduct);
 

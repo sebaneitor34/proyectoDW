@@ -21,7 +21,7 @@ passport.use(
       if (!isMatch)
         return done(null, false, { message: "Contraseña incorrecta." });
       
-      return done(null, user);
+      return done(null, { id: user._id, role: user.role });
     }
   )
 );

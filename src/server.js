@@ -16,6 +16,8 @@ import indexRoutes from "./routes/index.routes.js";
 import userRoutes from "./routes/auth.routes.js";
 import notesRoutes from "./routes/notes.routes.js";
 import "./config/passport.js";
+import authRequired from "./middlewares/auth.js";
+import adminRequired from "./middlewares/admin.js";
 
 // Initializations
 const app = express();
@@ -54,14 +56,16 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(express.static(join(__dirname, "public")));
 // routes
 app.use(indexRoutes);
 app.use(userRoutes);
-app.use(notesRoutes);
 app.use(cartRoutes);
+app.use(notesRoutes);
+
 
 // static files
-app.use(express.static(join(__dirname, "public")));
+
 
 app.use((req, res, next) => {
   return res.status(404).render("404");
