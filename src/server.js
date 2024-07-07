@@ -29,7 +29,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 console.log('JWT_SECRET:', process.env.JWT_SECRET);
 
 // settings
-app.set("port", PORT);
+app.set("port", process.env.PORT || 3000);
 app.set("views", join(__dirname, "views"));
 
 const hbs = create({ extname: ".hbs" }); // Crear instancia del motor de plantillas
@@ -53,9 +53,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
 // Global Variables
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash("success_msg");
