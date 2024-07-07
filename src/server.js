@@ -10,8 +10,8 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { create } from "express-handlebars";
 import cookieParser from "cookie-parser"; // Importar cookie-parser
-const port = 3000;
-import { MONGODB_URI, PORT } from "./config.js";
+
+
 
 import cartRoutes from "./routes/cart.routes.js";
 import indexRoutes from "./routes/index.routes.js";
@@ -46,7 +46,6 @@ app.use(
     secret: process.env.SESSION_SECRET || "secret",
     resave: true,
     saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: MONGODB_URI }),
   })
 );
 app.use(passport.initialize());
