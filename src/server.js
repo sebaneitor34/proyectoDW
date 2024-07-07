@@ -10,7 +10,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { create } from "express-handlebars";
 import cookieParser from "cookie-parser"; // Importar cookie-parser
-const port = 80;
+const port = 3000;
 import { MONGODB_URI, PORT } from "./config.js";
 
 import cartRoutes from "./routes/cart.routes.js";
