@@ -13,8 +13,7 @@ services:
     volumes:
       - .:/usr/src/app
     environment:
-      - MONGODB_URI=mongodb+srv://sebastianvaras:sebaneitor34@cluster0.runjcec.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-      - PORT=4000
+      - PORT=3000
       - NODE_ENV=development
     command: /bin/sh -c 'npm install && npm run dev'
   mongo:

@@ -9,7 +9,7 @@ import MongoStore from "connect-mongo";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { create } from "express-handlebars";
-import cookieParser from "cookie-parser"; // Importar cookie-parser
+import cookieParser from "cookie-parser"; 
 
 
 
@@ -21,26 +21,30 @@ import "./config/passport.js";
 import authRequired from "./middlewares/auth.js";
 import adminRequired from "./middlewares/admin.js";
 
-// Initializations
+console.log('EVENTS_APP_MONGODB_HOST:', process.env.EVENTS_APP_MONGODB_HOST);
+console.log('EVENTS_APP_MONGODB_DATABASE:', process.env.EVENTS_APP_MONGODB_DATABASE);
+
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Verificar que la variable JWT_SECRET esté cargada correctamente
-console.log('JWT_SECRET:', process.env.JWT_SECRET);
 
-// settings
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
+console.log('MONGODB_URI:', process.env.MONGODB_URI);
+
+const port = process.env.PORT || 3000;
+
 app.set("port", process.env.PORT || 3000);
 app.set("views", join(__dirname, "views"));
 
-const hbs = create({ extname: ".hbs" }); // Crear instancia del motor de plantillas
-app.engine(".hbs", hbs.engine); // Configurar motor de plantillas
+const hbs = create({ extname: ".hbs" }); 
+app.engine(".hbs", hbs.engine); 
 app.set("view engine", ".hbs");
 
-// middlewares
+
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
-app.use(cookieParser()); // Usar cookie-parser
+app.use(cookieParser()); 
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret",
@@ -52,7 +56,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-// Global Variables
+
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash("success_msg");
   res.locals.error_msg = req.flash("error_msg");
@@ -63,19 +67,19 @@ app.use((req, res, next) => {
 
 app.use(express.static(join(__dirname, "public")));
 
-// routes
+
 app.use(indexRoutes);
 app.use(userRoutes);
 app.use(cartRoutes);
 app.use(notesRoutes);
 
-// static files
+
 app.use((req, res, next) => {
   return res.status(404).render("404");
 });
 
 app.use((error, req, res, next) => {
-  console.error('Error detectado:', error.stack); // Registrar el error en la consola
+  console.error('Error detectado:', error.stack);
   req.flash('error_msg', 'Ocurrió un error en el servidor.');
   res.status(error.status || 500);
   res.render("error", {

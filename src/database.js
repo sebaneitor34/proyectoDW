@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
+import { MONGODB_URI } from './config.js';
 
-const { EVENTS_APP_MONGODB_HOST, EVENTS_APP_MONGODB_DATABASE } = process.env;
-const MONGODB_URI = `mongodb://${EVENTS_APP_MONGODB_HOST}/${EVENTS_APP_MONGODB_DATABASE}`;
+console.log('MONGODB_URI:', MONGODB_URI);  // Verificación adicional
 
 mongoose.connect(MONGODB_URI, {
     useUnifiedTopology: true,
