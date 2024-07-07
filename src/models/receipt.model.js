@@ -11,8 +11,12 @@ const receiptSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-const cartModel = mongoose.model("receipt", receiptSchema);
+const receiptModel = mongoose.model("receipt", receiptSchema);
 
-export default cartModel;
+export default receiptModel;

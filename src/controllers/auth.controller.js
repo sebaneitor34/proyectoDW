@@ -1,107 +1,140 @@
+// src/controllers/auth.controller.js
 import User from "../models/User.js";
 import passport from "passport";
 import jwt from 'jsonwebtoken';
 
+// Renderizar formulario de registro
 export const renderSignUpForm = (req, res) => res.render("signup");
 
+// Renderizar cuenta del usuario
 export const renderCuenta = (req, res) => {
   const user = req.user;
-  res.render("Cuenta",{wallet: user.wallet});
+  res.render("Cuenta", { wallet: user.wallet });
 };
 
+// Registrar un nuevo usuario
 export const signup = async (req, res) => {
-  let errors = [];
-  const { name, email, password, confirm_password, role= 'USER' } = req.body;
-  if (password !== confirm_password) {
-    errors.push({ text: "Passwords do not match." });
-  }
+  try {
+    let errors = [];
+    const { name, lastName, email, password, confirm_password, address, birthday, role = 'USER' } = req.body;
 
-  if (password.length < 4) {
-    errors.push({ text: "Passwords must be at least 4 characters." });
-  }
+    if (password !== confirm_password) {
+      errors.push({ text: "Passwords do not match." });
+    }
 
-  if (errors.length > 0) {
-    return res.render("/signup", {
-      errors,
-      name,
-      email,
-      password,
-      confirm_password,
-    });
-  }
+    if (password.length < 4) {
+      errors.push({ text: "Passwords must be at least 4 characters." });
+    }
 
-  // Look for email coincidence
-  const userFound = await User.findOne({ email: email });
-  if (userFound) {
-    req.flash("error_msg", "The Email is already in use.");
-    return res.redirect("/signup");
-  }
+    if (errors.length > 0) {
+      return res.render("signup", {
+        errors,
+        name,
+        lastName,
+        email,
+        password,
+        confirm_password,
+        address,
+        birthday
+      });
+    }
 
-  // Saving a New User
-  const newUser = new User({ name, email, password });
-  newUser.password = await newUser.encryptPassword(password);
-  await newUser.save();
-  req.flash("success_msg", "You are registered.");
-  res.redirect("login");
+    // Buscar coincidencia de email
+    const userFound = await User.findOne({ email: email });
+    if (userFound) {
+      req.flash("error_msg", "The Email is already in use.");
+      return res.redirect("/signup");
+    }
+
+    // Guardar un nuevo usuario
+    const newUser = new User({ name, lastName, email, password, address, birthday, role });
+    newUser.password = await newUser.encryptPassword(password);
+    await newUser.save();
+
+    // Generar token JWT
+    const token = jwt.sign({ id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.cookie('token', token, { httpOnly: true });
+
+    req.flash("success_msg", "You are registered.");
+    res.redirect("login");
+  } catch (error) {
+    console.error('Error registrando usuario:', error);
+    res.status(500).render("error", { message: "Internal Server Error" });
+  }
 };
 
+// Renderizar formulario de inicio de sesión
 export const renderSigninForm = (req, res) => res.render("login");
 
+// Iniciar sesión del usuario
 export const signin = (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
-      // Manejo de errores generales de autenticación
-      console.error('Error de autenticación:', err); // Registra el error para depuración
+      console.error('Error de autenticación:', err);
       req.flash('error_msg', 'Ocurrió un error inesperado durante la autenticación.');
       return res.redirect('/login');
     }
     if (!user) {
-      // Manejo de credenciales inválidas u otros errores de autenticación
-      req.flash('error_msg', info.message || 'Credenciales inválidas.'); // Muestra el mensaje de error si existe
+      req.flash('error_msg', info.message || 'Credenciales inválidas.');
       return res.redirect('/login');
     }
 
-    // Autenticación exitosa
     req.logIn(user, (err) => {
       if (err) {
-        // ... (manejo de errores) ...
+        console.error('Error al iniciar sesión:', err);
+        req.flash('error_msg', 'Ocurrió un error inesperado durante la autenticación.');
+        return res.redirect('/login');
       } else {
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        console.log(token);
-        res.cookie('token', token, { httpOnly: true }); // Establecer la cookie antes de redirigir
-        return res.redirect('/'); // Redirigir después de establecer la cookie
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        console.log('Token generado:', token);
+        res.cookie('token', token, { httpOnly: true });
+        return res.redirect('/');
       }
     });
-    
   })(req, res, next);
 };
 
-
+// Cerrar sesión del usuario
 export const logout = async (req, res, next) => {
   await req.logout((err) => {
-    if (err) return next(err);
+    if (err) {
+      console.error('Error al cerrar sesión:', err);
+      return next(err);
+    }
+    res.clearCookie('token');
     req.flash("success_msg", "You are logged out now.");
     res.redirect("/login");
   });
 };
 
+// Renderizar el saldo de la billetera del usuario
 export const renderWallet = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id); // Obtén el usuario autenticado
-    const walletBalance = user.wallet; // Obtén el saldo de la wallet del usuario
-
-    res.render('wallet', { walletBalance }); // Pasa el saldo a la vista
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      console.error('Usuario no encontrado:', req.user.id);
+      req.flash('error_msg', 'Usuario no encontrado.');
+      return res.redirect('/Cuenta');
+    }
+    const walletBalance = user.wallet;
+    res.render('wallet', { walletBalance });
   } catch (error) {
-    // ... manejo de errores ...
+    console.error('Error al obtener el saldo de la billetera:', error);
+    res.status(500).send('Error en el servidor');
   }
 };
 
-
+// Agregar saldo a la billetera del usuario
 export const addWallet = async (req, res) => {
-  const { wallet } = req.body;
-  const walletNumeber=wallet;
-  const user = req.user;
-user.wallet=walletNumeber+user.wallet;
-user.save();
-res.redirect("/Cuenta");
+  try {
+    const { wallet } = req.body;
+    const user = req.user;
+    user.wallet += parseFloat(wallet);
+    await user.save();
+    res.redirect("/Cuenta");
+  } catch (error) {
+    console.error('Error al agregar saldo a la billetera:', error);
+    res.status(500).send('Error en el servidor');
+  }
 };
+

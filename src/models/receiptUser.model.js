@@ -16,3 +16,4 @@ const receiptUserSchema = new mongoose.Schema({
 const receiptUserModel = mongoose.model("receiptUser", receiptUserSchema);
 
 export default receiptUserModel;
+

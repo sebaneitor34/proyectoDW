@@ -8,26 +8,26 @@ import receiptUserModel from "../models/receiptUser.model.js";
 export const renderRecibos = async (req, res) => {
   try {
     const user = req.user;
-    const idUser = user.id;
+    console.log("Usuario autenticado:", user);
 
-    const receiptUser = await receiptUserModel
-      .findOne({ user: user })
-      .populate({
-        path: "receipt",
+    const receiptUser = await receiptUserModel.findOne({ user: user._id }).populate({
+      path: "receipt",
+      populate: {
+        path: "relations",
         populate: {
-          path: "relations",
-          populate: {
-            path: "product",
-          },
+          path: "product",
         },
-      });
+      },
+    });
 
     if (!receiptUser) {
+      console.log("Usuario no encontrado en receiptUserModel:", user._id);
       return res.status(404).send("Usuario no encontrado");
     }
 
     const receiptToRender = receiptUser.receipt.map((receipt) => ({
       total: receipt.total,
+      createdAt: receipt.createdAt,
       products: receipt.relations.map((relation) => ({
         productName: relation.product.productName,
         quantity: relation.quantity,
@@ -36,24 +36,99 @@ export const renderRecibos = async (req, res) => {
       })),
     }));
 
-    console.log("recibos", receiptUser);
+    console.log("Recibos encontrados:", receiptToRender);
 
     res.render("recibos", { receiptToRender });
   } catch (error) {
-    console.log(error);
+    console.log("Error en renderRecibos:", error);
+    res.status(500).send("Error del servidor");
+  }
+};
+
+export const renderAllReceipts = async (req, res) => {
+  try {
+    const user = req.user;
+
+    const receiptUser = await receiptUserModel.findOne({ user: user._id }).populate({
+      path: "receipt",
+      populate: {
+        path: "relations",
+        populate: {
+          path: "product",
+        },
+      },
+    });
+
+    if (!receiptUser) {
+      return res.status(404).send("Usuario no encontrado");
+    }
+
+    const bills = receiptUser.receipt.map((receipt) => ({
+      id: receipt._id,
+      createdAt: receipt.createdAt,
+      total: receipt.total,
+      quantityOfProducts: receipt.relations.length,
+    }));
+
+    res.json({ bills });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error del servidor");
+  }
+};
+
+export const renderReceiptDetail = async (req, res) => {
+  try {
+    const user = req.user;
+    const receiptId = req.params.id;
+
+    const receipt = await receiptModel.findById(receiptId).populate({
+      path: "relations",
+      populate: {
+        path: "product",
+      },
+    });
+
+    if (!receipt) {
+      return res.status(404).send("Recibo no encontrado");
+    }
+
+    const receiptUser = await receiptUserModel.findOne({ user: user._id, receipt: receipt._id });
+
+    if (!receiptUser) {
+      return res.status(403).send("Acceso denegado");
+    }
+
+    const bill = {
+      id: receipt._id,
+      createdAt: receipt.createdAt,
+      total: receipt.total,
+      quantityOfProducts: receipt.relations.length,
+      products: receipt.relations.map((relation) => ({
+        id: relation.product._id,
+        name: relation.product.productName,
+        description: relation.product.description,
+        price: relation.product.price,
+        quantity: relation.quantity,
+      })),
+    };
+
+    res.json({ bill });
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Error del servidor");
   }
 };
 
 export const createReceipt = async (user) => {
   try {
-    const cart = await cartModel.findOne({ user: user }).populate({
+    const cart = await cartModel.findOne({ user: user._id }).populate({
       path: "products",
-      populate: { path: "product" }, // Populate del campo product en cartRelationModel
+      populate: { path: "product" },
     });
 
     if (!cart) {
-      console.error("No se encontró ningún carrito para el usuario:");
+      console.error("No se encontró ningún carrito para el usuario:", user._id);
       return null;
     }
 
@@ -70,59 +145,56 @@ export const createReceipt = async (user) => {
       total: cart.amount,
     });
 
-    newReceipt.save();
+    await newReceipt.save();
+    console.log("Nuevo recibo creado:", newReceipt);
 
-    const receiptUser = await receiptUserModel.findOne({ user: user });
+    let receiptUser = await receiptUserModel.findOne({ user: user._id });
 
     if (!receiptUser) {
-      const newReceiptUser = new receiptUserModel({
-        user: user,
-        receipt: newReceipt,
+      receiptUser = new receiptUserModel({
+        user: user._id,
+        receipt: [newReceipt._id],
       });
-
-      await newReceiptUser.save();
-
-      console.log(
-        "new receipt created: ",
-        newReceipt,
-        "relation: ",
-        newReceiptUser
-      );
+      await receiptUser.save();
+      console.log("Nuevo usuario de recibo creado:", receiptUser);
     } else {
-      receiptUser.receipt.push(newReceipt);
-      receiptUser.save();
+      receiptUser.receipt.push(newReceipt._id);
+      await receiptUser.save();
+      console.log("Recibo añadido al usuario existente:", receiptUser);
     }
-
-    console.log("receipt added: ", receiptUser);
   } catch (error) {
-    console.log(error);
+    console.log("Error al crear recibo:", error);
   }
 };
 
 export const comprar = async (req, res) => {
-  const user = req.user;
+  try {
+    const user = req.user;
+    const cart = await cartModel.findOne({ user: user._id });
 
-  const cart = await cartModel.findOne({ user: user });
+    if (!cart) {
+      console.error("No se encontró el carrito para el usuario:", user._id);
+      return res.status(404).send("Carrito no encontrado");
+    }
 
-  const cartId = cart.id;
+    if (cart.amount > user.wallet) {
+      console.log("Saldo insuficiente para el usuario:", user._id);
+      return res.send("Saldo insuficiente");
+    }
 
-  if (cart.amount > user.wallet) {
-    res.send("Saldo insuficiente");
-    return;
-  } else {
-    createReceipt(user);
+    await createReceipt(user);
 
-    user.wallet = user.wallet - cart.amount;
-    cart.amount = 0;
-
+    user.wallet -= cart.amount;
     await user.save();
 
-    await cart.save();
+    await cartModel.findByIdAndDelete(cart._id);
+    console.log("Compra completada para el usuario:", user._id);
 
-    await cartModel.findByIdAndDelete(cartId);
+    res.redirect("/Carrito");
+  } catch (error) {
+    console.log("Error al realizar la compra:", error);
+    res.status(500).send("Error del servidor");
   }
-
-  res.redirect("/Carrito");
 };
 
 export const renderCart = async (req, res) => {
@@ -166,7 +238,7 @@ export const addCart = async (req, res) => {
     const user = req.user;
     const idProduct = req.params.id;
 
-    const cart = await cartModel.findOne({ user: user });
+    const cart = await cartModel.findOne({ user: user._id });
 
     const product = await productModel.findById(idProduct);
 
@@ -182,7 +254,7 @@ export const addCart = async (req, res) => {
       await newRelation.save();
 
       const newCart = new cartModel({
-        user: user,
+        user: user._id,
         products: [newRelation._id],
         amount: product.price,
       });
@@ -222,7 +294,7 @@ export const removeCart = async (req, res) => {
     const user = req.user;
     const idProduct = req.params.id;
 
-    const cart = await cartModel.findOne({ user: user });
+    const cart = await cartModel.findOne({ user: user._id });
     const product = await productModel.findById(idProduct);
 
     if (!product) {
@@ -237,7 +309,7 @@ export const removeCart = async (req, res) => {
       await newRelation.save();
 
       const newCart = new cartModel({
-        user: user,
+        user: user._id,
         products: [newRelation._id],
       });
       await newCart.save();

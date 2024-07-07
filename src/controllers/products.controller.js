@@ -1,60 +1,57 @@
 import producto from "../models/productos.model.js";
 
-export const renderProductForm=(req,res)=>{
-    res.render('addProduct')
+export const renderProductForm = (req, res) => {
+  res.render('addProduct');
 };
 
-export const createNewProduct=async (req,res)=>{
-    const {productName,price,description,stock, image}=req.body;
-    const newProducto=new producto({productName,price,description,stock, image})
-    await newProducto.save();
-    res.redirect('/')
-}
+export const createNewProduct = async (req, res) => {
+  const { productName, price, description, stock, image } = req.body;
+  const newProducto = new producto({ productName, price, description, stock, image });
+  await newProducto.save();
+  res.redirect('/');
+};
 
-export const renderProducts=async (req,res)=>{
-const productos =await producto.find().lean();
-res.render('homepage',{productos})
-}
+export const renderProducts = async (req, res) => {
+  const productos = await producto.find().lean();
+  res.render('homepage', { productos });
+};
 
+import Producto from "../models/productos.model.js";
 
 export const renderEditForm = async (req, res) => {
   try {
-    const productos =await producto.find().lean();
+    const producto = await Producto.findById(req.params.id).lean();
     if (!producto) {
       return res.status(404).send("Producto no encontrado");
     }
-    console.log(productos);
-    res.render("editProduct", { productos });
+    res.render("editProduct", { producto });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error e0n el servidor");
+    res.status(500).send("Error en el servidor");
   }
 };
 
 export const editProduct = async (req, res) => {
   try {
-    const { productName, price, description, stock, image } = req.body;
-    const productId = req.params.id;
+    const { productName, price, description, stock, image } = req.body;
+    const productId = req.params.id;
   
-    // Validación de datos (opcional, pero recomendada)
+    // Validación de datos (opcional, pero recomendada)
   
-    const productoActualizado = await producto.findByIdAndUpdate(productId, { 
-      productName, 
-      price, 
-      description, 
-      stock, 
-      image 
-    }.lean());
-  res.redirect('/');
+    await Producto.findByIdAndUpdate(productId, { 
+      productName, 
+      price, 
+      description, 
+      stock, 
+      image 
+    }).lean();
+    res.redirect('/');
   } catch (error) {
-    console.error(error);
-    req.flash('error_msg', 'Error al actualizar el producto');
-    res.redirect('/editProduct'); // Redirige de vuelta al formulario en caso de error
+    console.error(error);
+    req.flash('error_msg', 'Error al actualizar el producto');
+    res.redirect('/editProduct'); // Redirige de vuelta al formulario en caso de error
   }
-}
-
-
-
+};
 
 
 export const  renderCamisetas=async (req,res)=>{

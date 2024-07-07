@@ -4,13 +4,16 @@ import bcrypt from "bcryptjs";
 const UserSchema = new mongoose.Schema(
   {
     name: { type: String, trim: true },
+    lastname: { type: String, trim: true },
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
     wallet: { type: Number, default: 0, required: true },
-    role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' }
-  });
-
-
+    role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
+    address: { type: String, trim: true },
+    birthday: { type: Date }
+  },
+  { timestamps: true }
+);
 
 UserSchema.methods.encryptPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);

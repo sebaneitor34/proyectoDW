@@ -1,22 +1,52 @@
 import { Router } from "express";
-import { renderProductForm, createNewProduct,renderProducts,renderEditForm,editProduct,deleteProduct,renderCamisetas} from "../controllers/products.controller.js";
-import authRequired from '../middlewares/auth.js';
+import {
+  renderProductForm,
+  createNewProduct,
+  renderProducts,
+  renderEditForm,
+  editProduct,
+  deleteProduct,
+  renderCamisetas
+} from "../controllers/products.controller.js";
+import authRequired from "../middlewares/auth.js";
 import adminRequired from "../middlewares/admin.js";
-const router =Router();
 
-// products.routes.js (corregido)
-router.get('/addProduct',renderProductForm);
+const router = Router();
 
-router.post ('/addProduct', createNewProduct);
+// Ruta para mostrar el formulario de agregar producto (protegida)
+router.get('/addProduct', authRequired, adminRequired, (req, res) => {
+  console.log('Accediendo a /addProduct');
+  renderProductForm(req, res);
+});
 
-router.get('/',renderProducts);
+// Ruta para crear un nuevo producto (protegida)
+router.post('/products', authRequired, adminRequired, (req, res) => {
+  console.log('Creando un nuevo producto');
+  createNewProduct(req, res);
+});
 
-router.get('/editProduct/:id',renderEditForm);
+// Ruta para mostrar el formulario de edición de producto (protegida)
+router.get('/editProduct/:id', authRequired, adminRequired, (req, res) => {
+  console.log('Accediendo a /editProduct');
+  renderEditForm(req, res);
+});
 
-router.post('/edit/:id',editProduct);
+// Ruta para editar un producto (protegida)
+router.post('/edit/:id', authRequired, adminRequired, (req, res) => {
+  console.log('Editando un producto');
+  editProduct(req, res);
+});
 
-router.get('/Camisetas/:id',renderCamisetas);
-
-router.get('/delete/:id',deleteProduct);
+// Rutas existentes
+router.get('/', renderProducts);
+router.get('/Camisetas/:id', renderCamisetas);
+router.get('/delete/:id', deleteProduct);
 
 export default router;
+
+
+
+
+
+
+

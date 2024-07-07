@@ -1,27 +1,22 @@
-
-
-
-// auth.middleware.js
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 
-dotenv.config();
-
-const authRequired = (req, res, next) => {
-  const token = req.headers.authorization;
+export default function authRequired(req, res, next) {
+  const token = req.cookies ? req.cookies.token : null;
+  console.log('Token recibido:', token);
 
   if (!token) {
-    return res.status(401).json({ message: 'No se proporcionó token de autenticación' });
+    console.log('No token provided');
+    return res.status(401).render('error', { message: 'Acceso denegado. No token provided.' });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Token decodificado:', decoded);
     req.user = decoded;
     next();
-  } catch (error) {
-    console.error("Error al verificar el token:", error); // Registra el error
-    res.status(401).json({ message: "Token inválido" }); // Responde con un error
+  } catch (ex) {
+    console.error('Error verificando el token:', ex); // Capturar detalles del error
+    res.status(400).render('error', { message: 'Token inválido.' });
   }
-};
+}
 
-export default authRequired;

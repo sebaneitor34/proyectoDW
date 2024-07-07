@@ -11,38 +11,32 @@
                     <a class="nav-link active" aria-current="page" href="/">Inicio</a>
                 </li>
                 {{#if user}}
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdownMenuLink"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Productos
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="/addProduct">Agregar producto</a>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/Cuenta">Mi cuenta</a>
-          </li>
-           <li class="nav-item">
-            <a class="nav-link" href="/Carrito">Carro</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Cerrar sesión</a>
-          </li>
-        {{else}}
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Iniciar sesión</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/signup">Registrarse</a>
-          </li>
-        {{/if}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Productos
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/addProduct">Agregar producto</a>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Cuenta">Mi cuenta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Carrito">Carro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Cerrar sesión</a>
+                    </li>
+                {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Iniciar sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Registrarse</a>
+                    </li>
+                {{/if}}
             </ul>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
