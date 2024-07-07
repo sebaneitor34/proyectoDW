@@ -10,7 +10,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { create } from "express-handlebars";
 import cookieParser from "cookie-parser"; // Importar cookie-parser
-
+const port = 80;
 import { MONGODB_URI, PORT } from "./config.js";
 
 import cartRoutes from "./routes/cart.routes.js";
@@ -53,6 +53,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
 // Global Variables
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash("success_msg");
