@@ -16,7 +16,7 @@ export const renderCuenta = (req, res) => {
 export const signup = async (req, res) => {
   try {
     let errors = [];
-    const { name, lastName, email, password, confirm_password, address, birthday, role = 'USER' } = req.body;
+    const { name, lastName, email, password, confirm_password, address, birthday, role } = req.body;
 
     if (password !== confirm_password) {
       errors.push({ text: "Passwords do not match." });
@@ -35,7 +35,8 @@ export const signup = async (req, res) => {
         password,
         confirm_password,
         address,
-        birthday
+        birthday,
+        role // Include role in case of errors
       });
     }
 
