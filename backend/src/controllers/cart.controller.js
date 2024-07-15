@@ -27,7 +27,7 @@ export const renderRecibos = async (req, res) => {
 
     const receiptToRender = receiptUser.receipt.map((receipt) => ({
       total: receipt.total,
-      createdAt: receipt.createdAt,
+      createdAt: receipt.createdAt.toLocaleString(),
       products: receipt.relations.map((relation) => ({
         productName: relation.product.productName,
         quantity: relation.quantity,
@@ -65,7 +65,7 @@ export const renderAllReceipts = async (req, res) => {
 
     const bills = receiptUser.receipt.map((receipt) => ({
       id: receipt._id,
-      createdAt: receipt.createdAt,
+      createdAt: receipt.createdAt.toLocaleString(),
       total: receipt.total,
       quantityOfProducts: receipt.relations.length,
     }));
@@ -101,7 +101,7 @@ export const renderReceiptDetail = async (req, res) => {
 
     const bill = {
       id: receipt._id,
-      createdAt: receipt.createdAt,
+      createdAt: receipt.createdAt.toLocaleString(),
       total: receipt.total,
       quantityOfProducts: receipt.relations.length,
       products: receipt.relations.map((relation) => ({

@@ -34,7 +34,8 @@ console.log('MONGODB_URI:', process.env.MONGODB_URI);
 const port = process.env.PORT || 3000;
 
 app.set("port", process.env.PORT || 3000);
-app.set("views", join(__dirname, "views"));
+app.set("views", join(__dirname, "../../frontend/src/views"));
+
 
 const hbs = create({ extname: ".hbs" }); 
 app.engine(".hbs", hbs.engine); 
@@ -65,7 +66,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(join(__dirname, "../../frontend/src/public")));
+
 
 
 app.use(indexRoutes);
